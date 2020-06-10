@@ -10,21 +10,36 @@ export default class Login extends Component {
     this.state = {
       email: "",
       password: "",
+      retype: "",
       users: []
     }
   }
 
   handleSubmit = () => {
-    var user = null;
-    user = this.state.users.find(user => user.email === this.state.email);
-    if (user === null)
-      console.log('No such user')
 
-    else if (user.password === this.state.password) {
-      this.props.signIn(user);
+    var user = null;
+
+    if (this.state.password != this.state.retype) {
+      console.log('passwords do not match');
+      return;
     }
-    else
-      console.log("incorrect password")
+
+    user = this.state.users.find(user => user.email === this.state.email);
+    if (user != null) {
+      console.log('User already exists');
+    }
+
+    else {
+      const newUser = {
+        email: this.state.email,
+        password: this.state.password
+      };
+
+      axios.post('http://localhost:5000/users/add', newUser)
+        .then(res => console.log(res.data));
+      console.log("New user added!");
+
+    }
   }
 
 
@@ -47,8 +62,12 @@ export default class Login extends Component {
     this.setState({ password: e.target.value });
   }
 
-  handleSignUp = () => {
-    this.props.changePage('signup');
+  handleRetypeChange = (e) => {
+    this.setState({ retype: e.target.value });
+  }
+
+  handleSignIn = () => {
+    this.props.changePage('signin');
   }
 
 
@@ -66,7 +85,7 @@ export default class Login extends Component {
             }}>
               <Card.Body>
                 <Card.Title>
-                  LogIn to StayInTouch
+                  SignUp to StayInTouch
                 </Card.Title>
                 <Form>
                   <Form.Group controlId="Email">
@@ -87,12 +106,21 @@ export default class Login extends Component {
                       style={{ width: "100%" }} />
                   </Form.Group>
 
+                  <Form.Group controlId="Retype">
+                    <Form.Control
+                      value={this.state.retype}
+                      onChange={this.handleRetypeChange}
+                      type="password"
+                      placeholder="Retype password"
+                      style={{ width: "100%" }} />
+                  </Form.Group>
+
                   <Form.Text className="text-muted">
                     We'll never share your details with anyone else.
                   </Form.Text>
 
                   <Button variant="light" onClick={this.handleSubmit} style={{ width: "100%" }}>
-                    Submit
+                    Register
                   </Button>
 
                 </Form>
@@ -101,7 +129,7 @@ export default class Login extends Component {
           </Row>
           <br />
           <Row className="justify-content-center">
-            <span onClick={this.handleSignUp}><strong> Sign up </strong> here!</span>
+            Already a member?&nbsp; <span onClick={this.handleSignIn}><strong> Sign in </strong> here!</span>
           </Row>
         </Container>
       </div >
