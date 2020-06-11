@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Card, Container, Row, Form, Button } from "react-bootstrap";
+import { AlertList, Alert, AlertContainer } from "react-bs-notifier";
 import axios from 'axios';
 
 export default class Login extends Component {
@@ -10,7 +11,10 @@ export default class Login extends Component {
     this.state = {
       email: "",
       password: "",
-      users: []
+
+      users: [],
+
+      alertMessage: ''
     }
   }
 
@@ -21,10 +25,16 @@ export default class Login extends Component {
         this.props.signIn(user);
       }
       else {
+        this.setState({
+          alertMessage: 'Incorrect password',
+        });
         console.log("incorrect password");
       }
     }
     else {
+      this.setState({
+        alertMessage: 'User not found',
+      });
       console.log('No such user')
     }
   }
@@ -60,6 +70,9 @@ export default class Login extends Component {
         <br />
         <br />
         <br />
+        <Row className="justify-content-center">
+          <p style={{ color: 'green' }}>{this.props.afterSignUpMessage}</p>
+        </Row>
         <br />
         <Container>
           <Row className="justify-content-center">
@@ -102,6 +115,11 @@ export default class Login extends Component {
             </Card>
           </Row>
           <br />
+          <div>
+            <Row className="justify-content-center">
+              <p style={{ color: 'red' }}>{this.state.alertMessage}</p>
+            </Row>
+          </div>
           <Row className="justify-content-center">
             Not registered? &nbsp;<a href="#" onClick={this.handleSignUp}><strong> Sign up </strong> here!</a>
           </Row>

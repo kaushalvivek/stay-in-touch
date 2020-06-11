@@ -12,6 +12,7 @@ export default class App extends Component {
     super(props);
     this.state = {
       user: null,
+      signUpMessage: '',
       page: "signin"
     }
   }
@@ -29,16 +30,30 @@ export default class App extends Component {
     });
   }
 
+  signUp = () => {
+    this.setState({
+      page: 'signin',
+      signUpMessage: "Congratulations! You're Registered. Sign in here."
+    });
+  }
+
 
   render() {
     if (this.state.page === "signin") {
       return (
-        <Login signIn={this.signIn} changePage={this.changePage} />
+        <Login
+          signIn={this.signIn}
+          changePage={this.changePage}
+          afterSignUpMessage={this.state.signUpMessage}
+        />
       );
     }
     else if (this.state.page === 'signup') {
       return (
-        <SignUp changePage={this.changePage} />
+        <SignUp
+          changePage={this.changePage}
+          signUp={this.signUp}
+        />
       );
     }
     else {

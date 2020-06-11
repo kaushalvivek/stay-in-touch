@@ -11,21 +11,26 @@ export default class Login extends Component {
       email: "",
       password: "",
       retype: "",
-      users: []
+      users: [],
+      error: ''
     }
   }
 
   handleSubmit = () => {
 
-    var user = null;
-
     if (this.state.password !== this.state.retype) {
+      this.setState({
+        error: "Passwords do not match"
+      })
       console.log('passwords do not match');
       return;
     }
 
-    user = this.state.users.find(user => user.email === this.state.email);
-    if (user !== null) {
+    var user = this.state.users.find(user => user.email === this.state.email);
+    if (user !== undefined) {
+      this.setState({
+        error: "Email already registered"
+      })
       console.log('User already exists');
     }
 
@@ -36,8 +41,11 @@ export default class Login extends Component {
       };
 
       axios.post('http://localhost:5000/users/add', newUser)
-        .then(res => console.log(res.data));
-      console.log("New user added!");
+        .then(res => {
+          console.log(res.data);
+          console.log("New user added!");
+          this.props.signUp();
+        });
 
     }
   }
@@ -126,6 +134,10 @@ export default class Login extends Component {
                 </Form>
               </Card.Body>
             </Card>
+          </Row>
+          <br />
+          <Row className="justify-content-center">
+            <p style={{ color: 'red' }}>{this.state.error}</p>
           </Row>
           <br />
           <Row className="justify-content-center">
