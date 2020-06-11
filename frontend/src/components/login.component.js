@@ -103,7 +103,7 @@ export default class Login extends Component {
           </Row>
           <br />
           <Row className="justify-content-center">
-            <span onClick={this.handleSignUp}><strong> Sign up </strong> here!</span>
+            Not registered? &nbsp;<a href="#" onClick={this.handleSignUp}><strong> Sign up </strong> here!</a>
           </Row>
         </Container>
       </div >
