@@ -6,9 +6,10 @@ import { Container, Row, Table } from 'react-bootstrap';
 const Friend = (props) => (
   <tr>
     <td>{props.friend.name}</td>
-    <td>{props.friend.level}</td>
-    <td>{props.friend.last_contacted}</td>
-    <td><a href="#" onClick={() => { props.contact(props.friend) }}>Contact</a></td>
+    <td>{'★'.repeat(props.friend.level)}</td>
+    <td>{props.friend.last_contacted.toString().slice(0, 10)}</td>
+    <td><a href="#" onClick={() => { props.contact(props.friend) }}>Contacted</a></td>
+    <td><a href="#" onClick={() => { props.delete(props.friend) }}>X</a></td>
   </tr >
 )
 
@@ -26,7 +27,9 @@ export default class FriendsList extends Component {
     axios.get('http://localhost:5000/friends/')
       .then(response => {
         var filtered_friends = response.data.filter((friend) => { return friend.user_email === this.props.user.email });
-        this.setState({ friends: filtered_friends });
+        var sorted_friends = filtered_friends.sort((b, a) => new Date(b.last_contacted) - new Date(a.last_contacted));
+        this.setState({ friends: sorted_friends });
+
         console.log('Component Mounted')
       })
       .catch((error) => {
@@ -36,7 +39,6 @@ export default class FriendsList extends Component {
 
   // function called on button click
   contactFriend = (friend) => {
-
     // get date
     var today = new Date();
 
@@ -50,19 +52,31 @@ export default class FriendsList extends Component {
 
     // post new data to database
     axios.post('http://localhost:5000/friends/update/' + friend._id, newFriend)
+      .then(res => {
+        console.log(res.data);
+        // reload component with state
+        axios.get('http://localhost:5000/friends/')
+          .then(response => {
+            var filtered_friends = response.data.filter((friend) => { return friend.user_email === this.props.user.email });
+            var sorted_friends = filtered_friends.sort((b, a) => new Date(b.last_contacted) - new Date(a.last_contacted));
+            this.setState({ friends: sorted_friends });
+            console.log('Component Re-Mounted')
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+
+      });
+  }
+
+  // remove friend
+  deleteFriend = (friend) => {
+    axios.delete('http://localhost:5000/friends/' + friend._id)
       .then(res => console.log(res.data));
-
-    // reload component with state
-    axios.get('http://localhost:5000/friends/')
-      .then(response => {
-        var filtered_friends = response.data.filter((friend) => { return friend.user_email === this.props.user.email });
-        this.setState({ friends: filtered_friends });
-        console.log('Component Re-Mounted')
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-
+    this.setState({
+      friends: this.state.friends.filter(el => el._id !== friend._id)
+    })
+    console.log("Friend deleted!")
   }
 
   friendsList() {
@@ -72,7 +86,7 @@ export default class FriendsList extends Component {
           friend={friend}
           user={this.props.user}
           contact={this.contactFriend}
-          setFriends={this.setFriends}
+          delete={this.deleteFriend}
           key={friend._id} />;
       })
     }
@@ -93,7 +107,8 @@ export default class FriendsList extends Component {
                   <th>Name</th>
                   <th>Level</th>
                   <th>Last Contacted</th>
-                  <th>Click to Contact</th>
+                  <th>Click to Mark Contacted</th>
+                  <th>Remove</th>
                 </tr>
               </thead>
               <tbody>

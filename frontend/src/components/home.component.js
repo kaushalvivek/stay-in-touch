@@ -22,8 +22,7 @@ export default class Home extends Component {
           <Navbar />
           <br />
           <Route path='/' exact render={(props) => <FriendsList {...props} user={this.props.user} />} />
-          {/* <Route path='/add' render={(props) => <Pending {...props} user={this.props.user} />} /> */}
-          <Route path="/add" component={AddFriend} />
+          <Route path='/add' exact render={(props) => <AddFriend {...props} user={this.props.user} />} />
           <Route path="/stats" component={Statistics} />
         </div>
       </Router>

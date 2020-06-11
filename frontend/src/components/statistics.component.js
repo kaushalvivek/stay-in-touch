@@ -10,7 +10,7 @@ export default class Statistics extends Component {
   render() {
     return (
       <div>
-        This is the statistics page.
+        This is the statistics page. This will be up soon.
       </div>
     );
   }
