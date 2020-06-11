@@ -44,7 +44,7 @@ export default class App extends Component {
     else {
       return (
         <Router>
-          <Home user={this.state.user} />
+          <Home user={this.state.user} changePage={this.changePage} />
         </Router>
       )
     }

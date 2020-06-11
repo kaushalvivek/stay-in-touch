@@ -19,13 +19,13 @@ export default class Login extends Component {
 
     var user = null;
 
-    if (this.state.password != this.state.retype) {
+    if (this.state.password !== this.state.retype) {
       console.log('passwords do not match');
       return;
     }
 
     user = this.state.users.find(user => user.email === this.state.email);
-    if (user != null) {
+    if (user !== null) {
       console.log('User already exists');
     }
 

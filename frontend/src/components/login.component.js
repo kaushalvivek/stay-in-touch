@@ -15,16 +15,18 @@ export default class Login extends Component {
   }
 
   handleSubmit = () => {
-    var user = null;
-    user = this.state.users.find(user => user.email === this.state.email);
-    if (user === null)
-      console.log('No such user')
-
-    else if (user.password === this.state.password) {
-      this.props.signIn(user);
+    var user = this.state.users.find(user => user.email === this.state.email);
+    if (user !== undefined) {
+      if (user.password === this.state.password) {
+        this.props.signIn(user);
+      }
+      else {
+        console.log("incorrect password");
+      }
     }
-    else
-      console.log("incorrect password")
+    else {
+      console.log('No such user')
+    }
   }
 
 
