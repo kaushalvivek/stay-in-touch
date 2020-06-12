@@ -21,7 +21,7 @@ const friendsRouter = require('./routes/friend');
 app.use('/friends', friendsRouter);
 
 // Connect to DB
-const uri = process.env.ATLAS_URI;
+const uri = "mongodb+srv://vivekkaushal:dbpassword@cluster0-zv3lg.gcp.mongodb.net/test?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }
 );
 const connection = mongoose.connection;
@@ -29,7 +29,12 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 })
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
+});
+
 // Start app
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
