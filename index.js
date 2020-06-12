@@ -36,10 +36,7 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging')
   });
 }
 
-
-
 // Start app
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
