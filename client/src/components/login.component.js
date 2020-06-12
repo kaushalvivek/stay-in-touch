@@ -45,6 +45,7 @@ export default class Login extends Component {
     axios.get('http://localhost:5000/users/')
       .then(response => {
         this.setState({ users: response.data });
+        console.log("Users Loaded");
       })
       .catch((error) => {
         console.log(error);
