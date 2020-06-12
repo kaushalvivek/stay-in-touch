@@ -42,7 +42,7 @@ export default class AddFriend extends Component {
     };
 
     console.log(friend);
-    axios.post('http://localhost:5000/friends/add', friend)
+    axios.post('/api/friends/add', friend)
       .then(res => {
         console.log(res.data)
         console.log('added!')

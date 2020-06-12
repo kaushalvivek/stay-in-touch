@@ -40,7 +40,7 @@ export default class Login extends Component {
         password: this.state.password
       };
 
-      axios.post('http://localhost:5000/users/add', newUser)
+      axios.post('/api/users/add', newUser)
         .then(res => {
           console.log(res.data);
           console.log("New user added!");
@@ -53,7 +53,7 @@ export default class Login extends Component {
 
 
   componentDidMount() {
-    axios.get('http://localhost:5000/users/')
+    axios.get('/api/users/')
       .then(response => {
         this.setState({ users: response.data });
       })

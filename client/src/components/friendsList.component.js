@@ -23,7 +23,7 @@ export default class FriendsList extends Component {
 
   // fill state with user's friends
   componentDidMount() {
-    axios.get('http://localhost:5000/friends/')
+    axios.get('/api/friends/')
       .then(response => {
         var filtered_friends = response.data.filter((friend) => { return friend.user_email === this.props.user.email });
         var sorted_friends = filtered_friends.sort((b, a) => new Date(b.last_contacted) - new Date(a.last_contacted));
@@ -50,11 +50,11 @@ export default class FriendsList extends Component {
     }
 
     // post new data to database
-    axios.post('http://localhost:5000/friends/update/' + friend._id, newFriend)
+    axios.post('/api/friends/update/' + friend._id, newFriend)
       .then(res => {
         console.log(res.data);
         // reload component with state
-        axios.get('http://localhost:5000/friends/')
+        axios.get('/api/friends/')
           .then(response => {
             var filtered_friends = response.data.filter((friend) => { return friend.user_email === this.props.user.email });
             var sorted_friends = filtered_friends.sort((b, a) => new Date(b.last_contacted) - new Date(a.last_contacted));
@@ -70,7 +70,7 @@ export default class FriendsList extends Component {
 
   // remove friend
   deleteFriend = (friend) => {
-    axios.delete('http://localhost:5000/friends/' + friend._id)
+    axios.delete('/api/friends/' + friend._id)
       .then(res => console.log(res.data));
     this.setState({
       friends: this.state.friends.filter(el => el._id !== friend._id)
