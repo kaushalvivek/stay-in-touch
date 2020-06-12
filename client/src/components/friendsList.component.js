@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Container, Row, Table } from 'react-bootstrap';
+import { Button, Container, Row, Table } from 'react-bootstrap';
 
 const Friend = (props) => (
   <tr>
@@ -17,7 +17,8 @@ export default class FriendsList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      friends: null
+      friends: null,
+      mode: 0
     }
   }
 
@@ -34,6 +35,32 @@ export default class FriendsList extends Component {
       .catch((error) => {
         console.log(error);
       })
+  }
+
+
+  // filter friends based on stars
+  filterFriends = (stars) => {
+    axios.get('/api/friends/')
+      .then(response => {
+        var filtered_friends = response.data.filter((friend) => { return friend.user_email === this.props.user.email });
+        var sorted_friends = filtered_friends.sort((b, a) => new Date(b.last_contacted) - new Date(a.last_contacted));
+        if (stars === 0) {
+          this.setState({ friends: sorted_friends, mode: 0 });
+        }
+        else {
+          var starred_friends = sorted_friends.filter((friend) => { return friend.level === stars.toString() });
+          this.setState({ friends: starred_friends, mode: stars })
+        }
+      });
+  }
+
+  filterInfoMessage = (mode) => {
+    if (mode == 0) {
+      return (" all friends");
+    }
+    else {
+      return (" friends with " + mode + " stars");
+    }
   }
 
   // function called on button click
@@ -98,6 +125,18 @@ export default class FriendsList extends Component {
       <div>
         <Container>
           <br />
+          <Row className="justify-content-center">
+            <p>Now showing {this.filterInfoMessage(this.state.mode)}</p>
+          </Row>
+          <br />
+          <Row className="justify-content-center">
+            <Button variant="secondary" onClick={() => this.filterFriends(0)}>All</Button> &nbsp;
+            <Button variant="secondary" onClick={() => this.filterFriends(1)}>1★</Button> &nbsp;
+            <Button variant="secondary" onClick={() => this.filterFriends(2)}>2★</Button> &nbsp;
+            <Button variant="secondary" onClick={() => this.filterFriends(3)}>3★</Button> &nbsp;
+            <Button variant="secondary" onClick={() => this.filterFriends(4)}>4★</Button> &nbsp;
+            <Button variant="secondary" onClick={() => this.filterFriends(5)}>5★</Button>
+          </Row>
           <br />
           <Row className="justify-content-center">
             <Table striped bordered hover>
@@ -116,7 +155,7 @@ export default class FriendsList extends Component {
             </Table>
           </Row>
         </Container>
-      </div>
+      </div >
     );
   }
 }
