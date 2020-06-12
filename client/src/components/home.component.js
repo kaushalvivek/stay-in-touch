@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from 'axios';
-import { Container, Row, Table } from 'react-bootstrap';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Navbar from './navbar.component';

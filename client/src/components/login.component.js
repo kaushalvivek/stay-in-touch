@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Card, Container, Row, Form, Button } from "react-bootstrap";
-import { AlertList, Alert, AlertContainer } from "react-bs-notifier";
 import axios from 'axios';
 
 export default class Login extends Component {
