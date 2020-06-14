@@ -29,7 +29,7 @@ export default class FriendsList extends Component {
         var filtered_friends = response.data.filter((friend) => { return friend.user_email === this.props.user.email });
         var sorted_friends = filtered_friends.sort((b, a) => new Date(b.last_contacted) - new Date(a.last_contacted));
         this.setState({ friends: sorted_friends });
-
+        filtered_friends(this.state.mode);
         console.log('Component Mounted')
       })
       .catch((error) => {
